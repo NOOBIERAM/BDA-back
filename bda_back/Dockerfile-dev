@@ -1,0 +1,21 @@
+# Utiliser une image officielle Python
+FROM python:3.11-slim
+
+# Créer le dossier de l’app
+WORKDIR /app
+
+# Installer les dépendances système (psycopg2, etc.)
+#RUN apt-get update && apt-get install -y gcc libpq-dev
+
+# Copier les fichiers requirements et installer
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copier le code de l’application
+# COPY ./src .
+
+# Exposer le port de FastAPI
+EXPOSE 8000
+
+# Commande de lancement avec Uvicorn
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

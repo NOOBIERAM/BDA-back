@@ -1,0 +1,31 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from routes.auth_routes import router as auth_router
+from routes.facture_routes import router as facture_router
+from services.jwt_middleware import JWTContextMiddleware
+
+
+app = FastAPI(
+    title="FastAPI bda",
+    description="API.",
+)
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+app.add_middleware(JWTContextMiddleware)
+
+app.include_router(auth_router)
+app.include_router(facture_router)
+
+
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
